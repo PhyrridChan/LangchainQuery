@@ -37,7 +37,7 @@ from server.utils import (fschat_controller_address, fschat_model_worker_address
 from server.knowledge_base.migrate import create_tables
 import argparse
 from typing import List, Dict
-from configs import VERSION
+from configs import VERSION, SERVICE_NAME, TITLE, AUTHOR, STUDENT_NUM
 
 
 @deprecated(
@@ -567,10 +567,15 @@ def dump_server_info(after_start=False, args=None):
     from server.utils import api_address, webui_address
 
     print("\n")
-    print("=" * 30 + "Langchain-Chatchat Configuration" + "=" * 30)
+
+    print("=" * 30 + "LangchainQuery Configuration" + "=" * 30)
+    print("=" * 24 + TITLE + "=" * 6 + AUTHOR + "=" * 6 + STUDENT_NUM + "=" * 24)
+
     print(f"操作系统：{platform.platform()}.")
     print(f"python版本：{sys.version}")
-    print(f"项目版本：{VERSION}")
+
+    print(f"基座项目：{SERVICE_NAME}")
+    print(f"基座项目版本：{VERSION}")
     print(f"langchain版本：{langchain.__version__}. fastchat版本：{fastchat.__version__}")
     print("\n")
 

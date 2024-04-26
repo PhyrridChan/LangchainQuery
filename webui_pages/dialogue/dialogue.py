@@ -139,7 +139,7 @@ def dialogue_page(api: ApiRequest, is_lite: bool = False):
                           "知识库问答",
                           "文件对话",
                           "搜索引擎问答",
-                          "自定义Agent问答",
+                          # "自定义Agent问答",
                           ]
         dialogue_mode = st.selectbox("请选择对话模式：",
                                      dialogue_modes,
@@ -200,7 +200,7 @@ def dialogue_page(api: ApiRequest, is_lite: bool = False):
 
         index_prompt = {
             "LLM 对话": "llm_chat",
-            "自定义Agent问答": "agent_chat",
+            # "自定义Agent问答": "agent_chat",
             "搜索引擎问答": "search_engine_chat",
             "知识库问答": "knowledge_base_chat",
             "文件对话": "knowledge_base_chat",
@@ -326,44 +326,44 @@ def dialogue_page(api: ApiRequest, is_lite: bool = False):
                                        on_submit=on_feedback,
                                        kwargs={"message_id": message_id, "history_index": len(chat_box.history) - 1})
 
-            elif dialogue_mode == "自定义Agent问答":
-                if not any(agent in llm_model for agent in SUPPORT_AGENT_MODEL):
-                    chat_box.ai_say([
-                        f"正在思考... \n\n <span style='color:red'>该模型并没有进行Agent对齐，请更换支持Agent的模型获得更好的体验！</span>\n\n\n",
-                        Markdown("...", in_expander=True, title="思考过程", state="complete"),
-
-                    ])
-                else:
-                    chat_box.ai_say([
-                        f"正在思考...",
-                        Markdown("...", in_expander=True, title="思考过程", state="complete"),
-
-                    ])
-                text = ""
-                ans = ""
-                for d in api.agent_chat(prompt,
-                                        history=history,
-                                        model=llm_model,
-                                        prompt_name=prompt_template_name,
-                                        temperature=temperature,
-                                        ):
-                    try:
-                        d = json.loads(d)
-                    except:
-                        pass
-                    if error_msg := check_error_msg(d):  # check whether error occured
-                        st.error(error_msg)
-                    if chunk := d.get("answer"):
-                        text += chunk
-                        chat_box.update_msg(text, element_index=1)
-                    if chunk := d.get("final_answer"):
-                        ans += chunk
-                        chat_box.update_msg(ans, element_index=0)
-                    if chunk := d.get("tools"):
-                        text += "\n\n".join(d.get("tools", []))
-                        chat_box.update_msg(text, element_index=1)
-                chat_box.update_msg(ans, element_index=0, streaming=False)
-                chat_box.update_msg(text, element_index=1, streaming=False)
+            # elif dialogue_mode == "自定义Agent问答":
+            #     if not any(agent in llm_model for agent in SUPPORT_AGENT_MODEL):
+            #         chat_box.ai_say([
+            #             f"正在思考... \n\n <span style='color:red'>该模型并没有进行Agent对齐，请更换支持Agent的模型获得更好的体验！</span>\n\n\n",
+            #             Markdown("...", in_expander=True, title="思考过程", state="complete"),
+            #
+            #         ])
+            #     else:
+            #         chat_box.ai_say([
+            #             f"正在思考...",
+            #             Markdown("...", in_expander=True, title="思考过程", state="complete"),
+            #
+            #         ])
+            #     text = ""
+            #     ans = ""
+            #     for d in api.agent_chat(prompt,
+            #                             history=history,
+            #                             model=llm_model,
+            #                             prompt_name=prompt_template_name,
+            #                             temperature=temperature,
+            #                             ):
+            #         try:
+            #             d = json.loads(d)
+            #         except:
+            #             pass
+            #         if error_msg := check_error_msg(d):  # check whether error occured
+            #             st.error(error_msg)
+            #         if chunk := d.get("answer"):
+            #             text += chunk
+            #             chat_box.update_msg(text, element_index=1)
+            #         if chunk := d.get("final_answer"):
+            #             ans += chunk
+            #             chat_box.update_msg(ans, element_index=0)
+            #         if chunk := d.get("tools"):
+            #             text += "\n\n".join(d.get("tools", []))
+            #             chat_box.update_msg(text, element_index=1)
+            #     chat_box.update_msg(ans, element_index=0, streaming=False)
+            #     chat_box.update_msg(text, element_index=1, streaming=False)
             elif dialogue_mode == "知识库问答":
                 chat_box.ai_say([
                     f"正在查询知识库 `{selected_kb}` ...",

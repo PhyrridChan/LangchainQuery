@@ -5,7 +5,7 @@ from webui_pages.dialogue.dialogue import dialogue_page, chat_box
 from webui_pages.knowledge_base.knowledge_base import knowledge_base_page
 import os
 import sys
-from configs import VERSION
+from configs import VERSION, SERVICE_NAME, TITLE, AUTHOR, STUDENT_NUM
 from server.utils import api_address
 
 
@@ -15,13 +15,13 @@ if __name__ == "__main__":
     is_lite = "lite" in sys.argv
 
     st.set_page_config(
-        "Langchain-Chatchat WebUI",
+        "LangchainQuery WebUI",
         os.path.join("img", "chatchat_icon_blue_square_v2.png"),
         initial_sidebar_state="expanded",
         menu_items={
-            'Get Help': 'https://github.com/chatchat-space/Langchain-Chatchat',
-            'Report a bug': "https://github.com/chatchat-space/Langchain-Chatchat/issues",
-            'About': f"""欢迎使用 Langchain-Chatchat WebUI {VERSION}！"""
+            # 'Get Help': 'https://github.com/chatchat-space/Langchain-Chatchat',
+            # 'Report a bug': "https://github.com/chatchat-space/Langchain-Chatchat/issues",
+            'About': f"""欢迎使用 LangchainQuery WebUI (BASED ON Langchain-Chatchat {VERSION})！"""
         }
     )
 
@@ -45,7 +45,7 @@ if __name__ == "__main__":
             use_column_width=True
         )
         st.caption(
-            f"""<p align="right">当前版本：{VERSION}</p>""",
+            f"""<p align="right">{TITLE}-{AUTHOR}</p> <p align="right">(BASED ON{SERVICE_NAME}:{VERSION})</p>""",
             unsafe_allow_html=True,
         )
         options = list(pages)

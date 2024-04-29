@@ -455,7 +455,7 @@ def run_webui(started_event: mp.Event = None, run_mode: str = None):
            "--server.address", host,
            "--server.port", str(port),
            "--theme.base", "light",
-           "--theme.primaryColor", "#165dff",
+           "--theme.primaryColor", "#ff6407",
            "--theme.secondaryBackgroundColor", "#f5f5f5",
            "--theme.textColor", "#000000",
            ]

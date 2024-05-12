@@ -44,8 +44,8 @@ def file_exists(kb: str, selected_rows: List) -> Tuple[str, str]:
     check whether a doc file exists in local knowledge base folder.
     return the file's name and path if it exists.
     """
-    if selected_rows:
-        file_name = selected_rows[0]["file_name"]
+    if selected_rows is not None and not selected_rows.empty:
+        file_name = selected_rows.iloc[0].at["file_name"]
         file_path = get_file_path(kb, file_name)
         if os.path.isfile(file_path):
             return file_name, file_path
@@ -253,7 +253,7 @@ def knowledge_base_page(api: ApiRequest, is_lite: bool = None):
             st.write()
             # 将文件分词并加载到向量库中
             if cols[1].button(
-                    "重新添加至向量库" if selected_rows and (
+                    "重新添加至向量库" if selected_rows is not None and not selected_rows.empty and (
                             pd.DataFrame(selected_rows)["in_db"]).any() else "添加至向量库",
                     disabled=not file_exists(kb, selected_rows)[0],
                     use_container_width=True,
@@ -269,7 +269,7 @@ def knowledge_base_page(api: ApiRequest, is_lite: bool = None):
             # 将文件从向量库中删除，但不删除文件本身。
             if cols[2].button(
                     "从向量库删除",
-                    disabled=not (selected_rows and selected_rows[0]["in_db"]),
+                    disabled=not (selected_rows is not None and not selected_rows.empty and selected_rows.iloc[0].at["in_db"]),
                     use_container_width=True,
             ):
                 file_names = [row["file_name"] for row in selected_rows]
@@ -324,8 +324,8 @@ def knowledge_base_page(api: ApiRequest, is_lite: bool = None):
         st.write("文件内文档列表。双击进行修改，在删除列填入 Y 可删除对应行。")
         docs = []
         df = pd.DataFrame([], columns=["seq", "id", "content", "source"])
-        if selected_rows:
-            file_name = selected_rows[0]["file_name"]
+        if selected_rows is not None and not selected_rows.empty:
+            file_name = selected_rows.iloc[0].at["file_name"]
             docs = api.search_kb_docs(knowledge_base_name=selected_kb, file_name=file_name)
             data = [
                 {"seq": i + 1, "id": x["id"], "page_content": x["page_content"], "source": x["metadata"].get("source"),

@@ -6,7 +6,6 @@ import sys
 from multiprocessing import Process
 from datetime import datetime
 from pprint import pprint
-from langchain_core._api import deprecated
 
 try:
     import numexpr
@@ -40,10 +39,6 @@ from typing import List, Dict
 from configs import VERSION, SERVICE_NAME, TITLE, AUTHOR, STUDENT_NUM
 
 
-@deprecated(
-    since="0.3.0",
-    message="模型启动功能将于 Langchain-Chatchat 0.3.x重写,支持更多模式和加速启动，0.2.x中相关功能将废弃",
-    removal="0.3.0")
 def create_controller_app(
         dispatch_method: str,
         log_level: str = "INFO",

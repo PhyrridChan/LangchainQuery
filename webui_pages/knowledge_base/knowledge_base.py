@@ -47,6 +47,7 @@ def file_exists(kb: str, selected_rows: List) -> Tuple[str, str]:
     if selected_rows is not None and not selected_rows.empty:
         file_name = selected_rows.iloc[0].at["file_name"]
         file_path = get_file_path(kb, file_name)
+        print(file_path)
         if os.path.isfile(file_path):
             return file_name, file_path
     return "", ""
@@ -258,7 +259,7 @@ def knowledge_base_page(api: ApiRequest, is_lite: bool = None):
                     disabled=not file_exists(kb, selected_rows)[0],
                     use_container_width=True,
             ):
-                file_names = [row["file_name"] for row in selected_rows]
+                file_names = [row["file_name"] for index,row in selected_rows.iterrows()]  
                 api.update_kb_docs(kb,
                                    file_names=file_names,
                                    chunk_size=chunk_size,
@@ -272,7 +273,7 @@ def knowledge_base_page(api: ApiRequest, is_lite: bool = None):
                     disabled=not (selected_rows is not None and not selected_rows.empty and selected_rows.iloc[0].at["in_db"]),
                     use_container_width=True,
             ):
-                file_names = [row["file_name"] for row in selected_rows]
+                file_names = [row["file_name"] for index,row in selected_rows.iterrows()]  
                 api.delete_kb_docs(kb, file_names=file_names)
                 st.rerun()
 
@@ -281,7 +282,7 @@ def knowledge_base_page(api: ApiRequest, is_lite: bool = None):
                     type="primary",
                     use_container_width=True,
             ):
-                file_names = [row["file_name"] for row in selected_rows]
+                file_names = [row["file_name"] for index,row in selected_rows.iterrows()]  
                 api.delete_kb_docs(kb, file_names=file_names, delete_content=True)
                 st.rerun()
 
